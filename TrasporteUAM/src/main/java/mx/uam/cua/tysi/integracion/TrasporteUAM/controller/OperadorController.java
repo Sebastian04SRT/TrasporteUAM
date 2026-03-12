@@ -16,7 +16,7 @@ public class OperadorController {
         this.operadorService = operadorService;
     }
 
-    @PostMapping("/operadores")
+    @PostMapping("/operadoress")
     public OperadorDTO create(@RequestBody OperadorDTO dto) {
         return operadorService.create(dto);
     }
