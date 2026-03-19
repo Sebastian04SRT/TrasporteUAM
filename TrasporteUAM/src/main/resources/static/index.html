@@ -1240,7 +1240,7 @@
         tb.innerHTML = '<tr><td colspan="5"><div class="loading"><div class="spinner"></div><br>Cargando...</div></td></tr>';
         try {
             const data = await fetch(API + '/universidades').then(r => r.json());
-            if (!data.length) { tb.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">🏛️</div><p>No hay universidades registradas</p></div></td></tr>'; return; }
+            if (!data.length) { tb.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon"></div><p>No hay universidades registradas</p></div></td></tr>'; return; }
             tb.innerHTML = data.map(u => `
       <tr>
         <td><strong>#${u.idUniversidad}</strong></td>
@@ -1248,8 +1248,8 @@
         <td style="color:var(--texto-suave)">${u.direccion || '—'}</td>
         <td>${u.telefono || '—'}</td>
         <td><div class="td-actions">
-          <button class="btn btn-edit btn-sm" onclick='openModal("universidad", ${JSON.stringify(u)})'>✏️ Editar</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteUniversidad(${u.idUniversidad})">🗑️ Borrar</button>
+          <button class="btn btn-edit btn-sm" onclick='openModal("universidad", ${JSON.stringify(u)})'> Editar</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteUniversidad(${u.idUniversidad})"> Borrar</button>
         </div></td>
       </tr>`).join('');
         } catch(e) { tb.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--uam-rojo);padding:20px">Error al conectar con el servidor</td></tr>'; }
@@ -1305,8 +1305,8 @@
         <td>${uNombre}</td>
         <td>${badge(e.estatus)}</td>
         <td><div class="td-actions">
-          <button class="btn btn-edit btn-sm" onclick='openModal("estudiante", ${JSON.stringify(e)})'>✏️ Editar</button>
-          <button class="btn btn-danger btn-sm" onclick='deleteEstudiante("${e.matricula}")'>🗑️ Borrar</button>
+          <button class="btn btn-edit btn-sm" onclick='openModal("estudiante", ${JSON.stringify(e)})'> Editar</button>
+          <button class="btn btn-danger btn-sm" onclick='deleteEstudiante("${e.matricula}")'> Borrar</button>
         </div></td>
       </tr>`;
             }).join('');
@@ -1367,8 +1367,8 @@
         <td>${o.telefono || '—'}</td>
         <td>${badge(o.estado)}</td>
         <td><div class="td-actions">
-          <button class="btn btn-edit btn-sm" onclick='openModal("operador", ${JSON.stringify(o)})'>✏️ Editar</button>
-          <button class="btn btn-danger btn-sm" onclick='deleteOperador("${o.matricula}")'>🗑️ Borrar</button>
+          <button class="btn btn-edit btn-sm" onclick='openModal("operador", ${JSON.stringify(o)})'> Editar</button>
+          <button class="btn btn-danger btn-sm" onclick='deleteOperador("${o.matricula}")'>️ Borrar</button>
         </div></td>
       </tr>`).join('');
         } catch(e) { tb.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--uam-rojo);padding:20px">Error al conectar con el servidor</td></tr>'; }
@@ -1410,7 +1410,7 @@
         tb.innerHTML = '<tr><td colspan="7"><div class="loading"><div class="spinner"></div><br>Cargando...</div></td></tr>';
         try {
             const data = await fetch(API + '/unidades').then(r => r.json());
-            if (!data.length) { tb.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🚍</div><p>No hay unidades registradas</p></div></td></tr>'; return; }
+            if (!data.length) { tb.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon"></div><p>No hay unidades registradas</p></div></td></tr>'; return; }
             tb.innerHTML = data.map(u => `
       <tr>
         <td><strong>#${u.idUnidad}</strong></td>
@@ -1420,8 +1420,8 @@
         <td style="text-align:center">${u.capacidad || '—'}</td>
         <td>${badge(u.estado)}</td>
         <td><div class="td-actions">
-          <button class="btn btn-edit btn-sm" onclick='openModal("unidad", ${JSON.stringify(u)})'>✏️ Editar</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteUnidad(${u.idUnidad})">🗑️ Borrar</button>
+          <button class="btn btn-edit btn-sm" onclick='openModal("unidad", ${JSON.stringify(u)})'> Editar</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteUnidad(${u.idUnidad})"> Borrar</button>
         </div></td>
       </tr>`).join('');
         } catch(e) { tb.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--uam-rojo);padding:20px">Error al conectar con el servidor</td></tr>'; }
@@ -1532,7 +1532,7 @@
         tb.innerHTML = '<tr><td colspan="8"><div class="loading"><div class="spinner"></div><br>Cargando...</div></td></tr>';
         try {
             const data = await fetch(API + '/viajes').then(r => r.json());
-            if (!data.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">🛣️</div><p>No hay viajes registrados</p></div></td></tr>'; return; }
+            if (!data.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="empty-icon"></div><p>No hay viajes registrados</p></div></td></tr>'; return; }
             tb.innerHTML = data.map(v => {
                 const rNombre = rutas.find(r => r.idRuta === v.idRuta)?.nombreRuta || `Ruta ${v.idRuta}`;
                 const uNombre = unidades.find(u => u.idUnidad === v.idUnidad)?.numeroEconomico || `Unidad ${v.idUnidad}`;
