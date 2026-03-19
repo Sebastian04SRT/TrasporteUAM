@@ -12,7 +12,7 @@ public class PruebaControllers {
         return "SISISSISISIS UAMg";
     }
 
-    @GetMapping("/hola2")
+    @GetMapping("/hola1")
     public String hola() {
         return "ARRIBAAAAAAAAAA";
     }
