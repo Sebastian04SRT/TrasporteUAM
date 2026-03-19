@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudiantes — UAM Transporte</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --naranja:     #c95200;
+            --naranja-mid: #e06010;
+            --naranja-lt:  #fff4ed;
+            --naranja-brd: #f5c9a8;
+            --blanco:      #ffffff;
+            --fondo:       #fdf8f4;
+            --borde:       #e8ddd4;
+            --texto:       #2a1a0e;
+            --suave:       #7a6050;
+            --verde:       #3d7a3d;
+            --verde-lt:    #eaf4ea;
+            --rojo:        #a83232;
+            --rojo-lt:     #fbeaea;
+            --sombra:      0 2px 8px rgba(100,40,0,0.08);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Source Sans 3', sans-serif; background: var(--fondo); color: var(--texto); font-size: 14px; min-height: 100vh; }
+
+        .topbar { background: var(--naranja); height: 54px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(100,40,0,0.18); }
+        .topbar-left { display: flex; align-items: center; gap: 14px; }
+        .topbar-logo { width: 34px; height: 34px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+        .topbar-logo svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 1.8; }
+        .topbar h1 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: white; letter-spacing: 0.2px; }
+        .topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.25); }
+        .topbar-sub { font-size: 12px; color: rgba(255,255,255,0.6); font-family: 'Source Code Pro', monospace; }
+        .topbar-right { font-family: 'Source Code Pro', monospace; font-size: 11px; color: rgba(255,255,255,0.5); }
+
+        .page-header { background: var(--blanco); border-bottom: 2px solid var(--naranja-brd); padding: 20px 40px; }
+        .page-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--naranja); }
+        .page-header p { font-size: 13px; color: var(--suave); margin-top: 3px; }
+
+        .stats-bar { background: var(--blanco); border-bottom: 1px solid var(--borde); padding: 12px 40px; display: flex; gap: 32px; align-items: center; }
+        .stat { display: flex; align-items: baseline; gap: 8px; }
+        .stat-num { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--naranja); }
+        .stat-num.verde { color: var(--verde); }
+        .stat-num.gris { color: var(--suave); }
+        .stat-label { font-size: 12px; color: var(--suave); }
+        .stat-sep { width: 1px; height: 26px; background: var(--borde); }
+
+        .toolbar { background: var(--blanco); border-bottom: 1px solid var(--borde); padding: 13px 40px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .search-box { position: relative; flex: 1; min-width: 220px; max-width: 360px; }
+        .search-box svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; stroke: var(--suave); fill: none; stroke-width: 2; pointer-events: none; }
+        .search-input { width: 100%; padding: 9px 11px 9px 34px; border: 1.5px solid var(--borde); border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: var(--texto); background: var(--fondo); outline: none; transition: border-color 0.15s; }
+        .search-input:focus { border-color: var(--naranja); background: var(--blanco); }
+        .search-input::placeholder { color: var(--suave); }
+        .filter-select { padding: 9px 11px; border: 1.5px solid var(--borde); border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: var(--texto); background: var(--fondo); outline: none; cursor: pointer; transition: border-color 0.15s; }
+        .filter-select:focus { border-color: var(--naranja); }
+        .toolbar-right { margin-left: auto; }
+
+        .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.15s; letter-spacing: 0.1px; }
+        .btn-primary { background: var(--naranja); color: white; box-shadow: 0 2px 8px rgba(100,40,0,0.2); }
+        .btn-primary:hover { background: var(--naranja-mid); }
+        .btn-secondary { background: var(--blanco); color: var(--texto); border: 1.5px solid var(--borde); }
+        .btn-secondary:hover { border-color: var(--naranja); color: var(--naranja); background: var(--naranja-lt); }
+        .btn-danger { background: var(--blanco); color: var(--rojo); border: 1.5px solid #e8b8b8; }
+        .btn-danger:hover { background: var(--rojo-lt); border-color: var(--rojo); }
+        .btn-sm { padding: 5px 12px; font-size: 12px; }
+
+        .content { padding: 26px 40px; }
+        .table-meta { font-family: 'Source Code Pro', monospace; font-size: 11px; color: var(--suave); margin-bottom: 10px; }
+        .table-meta span { color: var(--naranja); font-weight: 500; }
+
+        .table-wrap { background: var(--blanco); border: 1.5px solid var(--borde); border-radius: 8px; overflow: hidden; box-shadow: var(--sombra); }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: var(--naranja); }
+        th { padding: 11px 16px; text-align: left; font-family: 'Source Code Pro', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255,255,255,0.82); white-space: nowrap; }
+        td { padding: 13px 16px; font-size: 13px; color: var(--texto); border-bottom: 1px solid var(--borde); vertical-align: middle; }
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover td { background: var(--naranja-lt); }
+        .td-mono { font-family: 'Source Code Pro', monospace; font-size: 12px; color: var(--naranja); font-weight: 500; }
+        .td-nombre { font-weight: 600; }
+        .td-sub { font-size: 11px; color: var(--suave); margin-top: 2px; }
+        .td-actions { display: flex; gap: 6px; }
+
+        .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 600; letter-spacing: 0.2px; }
+        .badge-activo { background: var(--verde-lt); color: var(--verde); }
+        .badge-inactivo { background: var(--fondo); color: var(--suave); border: 1px solid var(--borde); }
+        .badge-suspendido { background: var(--rojo-lt); color: var(--rojo); }
+
+        .empty { text-align: center; padding: 52px 20px; color: var(--suave); }
+        .empty-icon { width: 48px; height: 48px; background: var(--naranja-lt); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; border: 1.5px solid var(--naranja-brd); }
+        .empty-icon svg { width: 22px; height: 22px; stroke: var(--naranja); fill: none; stroke-width: 1.5; }
+        .empty h3 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 600; color: var(--texto); margin-bottom: 5px; }
+        .empty p { font-size: 13px; }
+        .spinner { width: 24px; height: 24px; border: 2.5px solid var(--borde); border-top-color: var(--naranja); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(40,15,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+        .overlay.open { display: flex; }
+        .modal { background: var(--blanco); border-radius: 10px; width: 100%; max-width: 500px; max-height: 92vh; overflow-y: auto; box-shadow: 0 16px 48px rgba(100,40,0,0.2); animation: fadeUp 0.2s ease; border: 1.5px solid var(--borde); }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-head { background: var(--naranja); padding: 18px 22px; border-radius: 9px 9px 0 0; display: flex; align-items: center; justify-content: space-between; }
+        .modal-head h3 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: white; }
+        .modal-close { width: 28px; height: 28px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.25); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+        .modal-close:hover { background: rgba(255,255,255,0.15); }
+        .modal-close svg { width: 12px; height: 12px; stroke: white; fill: none; stroke-width: 2.5; }
+        .modal-body { padding: 18px 22px; }
+        .form-section { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--borde); }
+        .form-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .form-section-title { font-family: 'Source Code Pro', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.8px; text-transform: uppercase; color: var(--naranja); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--naranja-lt); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group:last-child { margin-bottom: 0; }
+        .form-group label { display: block; font-size: 11px; font-weight: 600; color: var(--suave); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-group input, .form-group select { width: 100%; padding: 9px 12px; border: 1.5px solid var(--borde); border-radius: 6px; font-family: 'Source Sans 3', sans-serif; font-size: 13px; color: var(--texto); background: var(--fondo); outline: none; transition: border-color 0.15s; }
+        .form-group input:focus, .form-group select:focus { border-color: var(--naranja); background: var(--blanco); }
+        .form-group input:disabled { opacity: 0.55; cursor: not-allowed; }
+        .modal-foot { padding: 14px 22px; border-top: 1px solid var(--borde); display: flex; gap: 8px; justify-content: flex-end; background: var(--fondo); border-radius: 0 0 9px 9px; }
+
+        .toasts { position: fixed; bottom: 20px; right: 20px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: var(--blanco); border-left: 4px solid var(--verde); border-radius: 6px; padding: 11px 16px; font-size: 13px; font-weight: 500; box-shadow: 0 4px 16px rgba(100,40,0,0.12); min-width: 230px; animation: toastIn 0.2s ease; color: var(--texto); }
+        .toast.error { border-left-color: var(--rojo); }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <div class="topbar-left">
+        <div class="topbar-logo">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87m-4-12a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h1>UAM Transporte</h1>
+        <div class="topbar-sep"></div>
+        <span class="topbar-sub">Sistema de Gestion</span>
+    </div>
+    <div class="topbar-right" id="reloj"></div>
+</div>
+
+<div class="page-header">
+    <h2>Estudiantes</h2>
+    <p>Registro y gestion de alumnos del sistema de transporte</p>
+</div>
+
+<div class="stats-bar">
+    <div class="stat">
+        <div class="stat-num" id="stat-total">—</div>
+        <div class="stat-label">Total registrados</div>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat">
+        <div class="stat-num verde" id="stat-activos">—</div>
+        <div class="stat-label">Activos</div>
+    </div>
+    <div class="stat-sep"></div>
+    <div class="stat">
+        <div class="stat-num gris" id="stat-otros">—</div>
+        <div class="stat-label">Inactivos / Suspendidos</div>
+    </div>
+</div>
+
+<div class="toolbar">
+    <div class="search-box">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input class="search-input" type="text" id="buscador" placeholder="Buscar por nombre, matricula o carrera..." oninput="filtrar()">
+    </div>
+    <select class="filter-select" id="fil-estatus" onchange="filtrar()">
+        <option value="">Todos los estatus</option>
+        <option value="ACTIVO">Activo</option>
+        <option value="INACTIVO">Inactivo</option>
+        <option value="SUSPENDIDO">Suspendido</option>
+    </select>
+    <select class="filter-select" id="fil-universidad" onchange="filtrar()">
+        <option value="">Todas las universidades</option>
+    </select>
+    <div class="toolbar-right">
+        <button class="btn btn-primary" onclick="abrirModal()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Agregar Estudiante
+        </button>
+    </div>
+</div>
+
+<div class="content">
+    <div class="table-meta" id="table-meta"></div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+            <tr>
+                <th>Matricula</th>
+                <th>Nombre</th>
+                <th>Carrera</th>
+                <th>Semestre</th>
+                <th>Universidad</th>
+                <th>Telefono</th>
+                <th>Estatus</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            <tr><td colspan="8"><div class="empty"><div class="spinner"></div><p>Cargando datos...</p></div></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="overlay" id="overlay">
+    <div class="modal">
+        <div class="modal-head">
+            <h3 id="modal-title">Nuevo Estudiante</h3>
+            <button class="modal-close" onclick="cerrarModal()"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-section">
+                <div class="form-section-title">Datos Academicos</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Matricula</label><input type="text" id="f-matricula" placeholder="Ej. 2023001"></div>
+                    <div class="form-group"><label>Universidad</label><select id="f-universidad"></select></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Carrera</label><input type="text" id="f-carrera" placeholder="Ej. Ing. en Computacion"></div>
+                    <div class="form-group"><label>Semestre</label><input type="number" id="f-semestre" placeholder="Ej. 5" min="1" max="12"></div>
+                </div>
+            </div>
+            <div class="form-section">
+                <div class="form-section-title">Datos Personales</div>
+                <div class="form-group"><label>Nombre completo</label><input type="text" id="f-nombre" placeholder="Nombre y apellidos"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Telefono</label><input type="text" id="f-telefono" placeholder="Ej. 5512345678"></div>
+                    <div class="form-group"><label>Estatus</label>
+                        <select id="f-estatus">
+                            <option value="ACTIVO">Activo</option>
+                            <option value="INACTIVO">Inactivo</option>
+                            <option value="SUSPENDIDO">Suspendido</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group"><label>Direccion</label><input type="text" id="f-direccion" placeholder="Calle, colonia, delegacion"></div>
+            </div>
+        </div>
+        <div class="modal-foot">
+            <button class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+            <button class="btn btn-primary" onclick="guardar()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+    const API = 'http://localhost:8080';
+    let datos = [];
+    let universidades = [];
+    let editando = false;
+
+    function tick() {
+        document.getElementById('reloj').textContent =
+            new Date().toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    }
+    setInterval(tick, 1000); tick();
+
+    function toast(msg, tipo) {
+        const c = document.getElementById('toasts');
+        const t = document.createElement('div');
+        t.className = 'toast' + (tipo === 'err' ? ' error' : '');
+        t.textContent = msg;
+        c.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    function badge(val) {
+        const map = { ACTIVO: 'activo', INACTIVO: 'inactivo', SUSPENDIDO: 'suspendido' };
+        return `<span class="badge badge-${map[val]||'inactivo'}">${val}</span>`;
+    }
+
+    function getNombreUniv(id) {
+        return universidades.find(u => u.idUniversidad === id)?.nombre || ('ID ' + id);
+    }
+
+    async function cargarUniversidades() {
+        try {
+            universidades = await fetch(API + '/universidades').then(r => r.json());
+            const sel = document.getElementById('f-universidad');
+            const fil = document.getElementById('fil-universidad');
+            sel.innerHTML = universidades.map(u => `<option value="${u.idUniversidad}">${u.nombre}</option>`).join('');
+            fil.innerHTML = '<option value="">Todas las universidades</option>' +
+                universidades.map(u => `<option value="${u.idUniversidad}">${u.nombre}</option>`).join('');
+        } catch(e) {}
+    }
+
+    function abrirModal(data) {
+        editando = !!data;
+        document.getElementById('overlay').classList.add('open');
+        const mat = document.getElementById('f-matricula');
+        mat.value = data ? data.matricula : '';
+        mat.disabled = !!data;
+        document.getElementById('f-nombre').value = data ? data.nombre : '';
+        document.getElementById('f-carrera').value = data ? (data.carrera || '') : '';
+        document.getElementById('f-semestre').value = data ? (data.semestre || '') : '';
+        document.getElementById('f-telefono').value = data ? (data.telefono || '') : '';
+        document.getElementById('f-direccion').value = data ? (data.direccion || '') : '';
+        document.getElementById('f-estatus').value = data ? (data.estatus || 'ACTIVO') : 'ACTIVO';
+        if (data) setTimeout(() => document.getElementById('f-universidad').value = data.idUniversidad, 50);
+        document.getElementById('modal-title').textContent = data ? 'Editar Estudiante' : 'Nuevo Estudiante';
+    }
+
+    function cerrarModal() {
+        document.getElementById('overlay').classList.remove('open');
+        document.getElementById('f-matricula').disabled = false;
+    }
+
+    async function guardar() {
+        const matricula = document.getElementById('f-matricula').value.trim();
+        if (!matricula) { toast('La matricula es obligatoria', 'err'); return; }
+        const nombre = document.getElementById('f-nombre').value.trim();
+        if (!nombre) { toast('El nombre es obligatorio', 'err'); return; }
+        const body = {
+            matricula,
+            idUniversidad: parseInt(document.getElementById('f-universidad').value),
+            nombre,
+            carrera: document.getElementById('f-carrera').value.trim(),
+            semestre: parseInt(document.getElementById('f-semestre').value) || 0,
+            telefono: document.getElementById('f-telefono').value.trim(),
+            direccion: document.getElementById('f-direccion').value.trim(),
+            estatus: document.getElementById('f-estatus').value,
+        };
+        try {
+            if (editando) {
+                await fetch(API + '/estudiantes/' + matricula, { method: 'PATCH', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+                toast('Estudiante actualizado');
+            } else {
+                await fetch(API + '/estudiantes', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+                toast('Estudiante registrado');
+            }
+            cerrarModal(); cargar();
+        } catch(e) { toast('Error al conectar con el servidor', 'err'); }
+    }
+
+    async function eliminar(matricula, nombre) {
+        if (!confirm('Eliminar a "' + nombre + '"?')) return;
+        try {
+            await fetch(API + '/estudiantes/' + matricula, { method: 'DELETE' });
+            toast('Estudiante eliminado'); cargar();
+        } catch(e) { toast('Error al eliminar', 'err'); }
+    }
+
+    function filtrar() {
+        const q = document.getElementById('buscador').value.toLowerCase();
+        const est = document.getElementById('fil-estatus').value;
+        const univ = document.getElementById('fil-universidad').value;
+        renderTabla(datos.filter(e =>
+            (!q || (e.matricula||'').toLowerCase().includes(q) || (e.nombre||'').toLowerCase().includes(q) || (e.carrera||'').toLowerCase().includes(q)) &&
+            (!est || e.estatus === est) &&
+            (!univ || String(e.idUniversidad) === univ)
+        ));
+    }
+
+    function renderTabla(lista) {
+        const activos = datos.filter(e => e.estatus === 'ACTIVO').length;
+        document.getElementById('stat-total').textContent = datos.length;
+        document.getElementById('stat-activos').textContent = activos;
+        document.getElementById('stat-otros').textContent = datos.length - activos;
+        document.getElementById('table-meta').innerHTML = 'Mostrando <span>' + lista.length + '</span> de <span>' + datos.length + '</span> registros';
+        const tbody = document.getElementById('tbody');
+        if (!lista.length) {
+            tbody.innerHTML = `<tr><td colspan="8"><div class="empty">
+      <div class="empty-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+      <h3>Sin resultados</h3><p>No se encontraron coincidencias con los filtros aplicados.</p>
+    </div></td></tr>`;
+            return;
+        }
+        tbody.innerHTML = lista.map(e => `
+    <tr>
+      <td class="td-mono">${e.matricula}</td>
+      <td>
+        <div class="td-nombre">${e.nombre}</div>
+        <div class="td-sub">${e.direccion || ''}</div>
+      </td>
+      <td>${e.carrera || '—'}</td>
+      <td style="text-align:center;font-family:'Source Code Pro',monospace;font-size:12px">${e.semestre || '—'}</td>
+      <td style="font-size:12px">${getNombreUniv(e.idUniversidad)}</td>
+      <td style="font-family:'Source Code Pro',monospace;font-size:12px">${e.telefono || '—'}</td>
+      <td>${badge(e.estatus)}</td>
+      <td><div class="td-actions">
+        <button class="btn btn-secondary btn-sm" onclick='abrirModal(${JSON.stringify(e)})'>Editar</button>
+        <button class="btn btn-danger btn-sm" onclick='eliminar("${e.matricula}","${e.nombre}")'>Eliminar</button>
+      </div></td>
+    </tr>`).join('');
+    }
+
+    async function cargar() {
+        document.getElementById('tbody').innerHTML = `<tr><td colspan="8"><div class="empty"><div class="spinner"></div><p>Cargando...</p></div></td></tr>`;
+        try {
+            datos = await fetch(API + '/estudiantes').then(r => r.json());
+            renderTabla(datos);
+        } catch(e) {
+            document.getElementById('tbody').innerHTML = `<tr><td colspan="8"><div class="empty">
+      <div class="empty-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg></div>
+      <h3>Sin conexion</h3><p>Verifica que el servidor este corriendo en el puerto 8080.</p>
+    </div></td></tr>`;
+        }
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+    document.getElementById('overlay').addEventListener('click', e => { if (e.target === e.currentTarget) cerrarModal(); });
+    cargarUniversidades().then(() => cargar());
+</script>
+</body>
+</html>
