@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PruebaController {
 
-    @GetMapping("/prueba")
+    @GetMapping("/prueba1")
     public String prueba() {
         return "Bienvenido a trasporte UAMg";
     }
 
-    @GetMapping("/hola")
+    @GetMapping("/hola2")
     public String hola() {
         return "Bienvenido a trasporte UAM";
     }
