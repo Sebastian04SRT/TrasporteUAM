@@ -595,34 +595,34 @@
 <!-- ═══════════════ SIDEBAR ═══════════════ -->
 <aside class="sidebar">
     <div class="sidebar-logo">
-        <div class="logo-icon">🚌</div>
+        <div class="logo-icon"></div>
         <h1>UAM Transporte</h1>
         <p>Sistema de Gestión</p>
     </div>
     <nav class="sidebar-nav">
         <div class="nav-label">General</div>
         <button class="nav-item active" onclick="showSection('dashboard', this)">
-            <span class="nav-icon">📊</span> Dashboard
+            <span class="nav-icon"></span> Dashboard
         </button>
         <div class="nav-label">Catálogos</div>
         <button class="nav-item" onclick="showSection('universidades', this)">
-            <span class="nav-icon">🏛️</span> Universidades
+            <span class="nav-icon"></span> Universidades
         </button>
         <button class="nav-item" onclick="showSection('estudiantes', this)">
-            <span class="nav-icon">🎓</span> Estudiantes
+            <span class="nav-icon"></span> Estudiantes
         </button>
         <button class="nav-item" onclick="showSection('operadores', this)">
-            <span class="nav-icon">👤</span> Operadores
+            <span class="nav-icon"></span> Operadores
         </button>
         <button class="nav-item" onclick="showSection('unidades', this)">
-            <span class="nav-icon">🚍</span> Unidades
+            <span class="nav-icon"></span> Unidades
         </button>
         <div class="nav-label">Operación</div>
         <button class="nav-item" onclick="showSection('rutas', this)">
-            <span class="nav-icon">🗺️</span> Rutas
+            <span class="nav-icon"></span> Rutas
         </button>
         <button class="nav-item" onclick="showSection('viajes', this)">
-            <span class="nav-icon">🛣️</span> Viajes
+            <span class="nav-icon"></span> Viajes
         </button>
     </nav>
     <div class="sidebar-footer">
@@ -645,28 +645,28 @@
         <section id="section-dashboard" class="section active">
             <div class="dashboard-grid">
                 <div class="stat-card azul">
-                    <div class="stat-icon">🏛️</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-num" id="stat-universidades">—</div>
                     <div class="stat-label">Universidades</div>
                 </div>
                 <div class="stat-card naranja">
-                    <div class="stat-icon">🎓</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-num" id="stat-estudiantes">—</div>
                     <div class="stat-label">Estudiantes</div>
                 </div>
                 <div class="stat-card verde">
-                    <div class="stat-icon">🚍</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-num" id="stat-unidades">—</div>
                     <div class="stat-label">Unidades</div>
                 </div>
                 <div class="stat-card morado">
-                    <div class="stat-icon">🛣️</div>
+                    <div class="stat-icon"></div>
                     <div class="stat-num" id="stat-viajes">—</div>
                     <div class="stat-label">Viajes</div>
                 </div>
             </div>
             <div style="background:#fff;border-radius:var(--radio);padding:32px;box-shadow:var(--sombra);border:1px solid var(--borde);text-align:center">
-                <div style="font-size:48px;margin-bottom:16px">🚌</div>
+                <div style="font-size:48px;margin-bottom:16px"></div>
                 <h3 style="font-family:'Syne',sans-serif;font-size:22px;color:var(--uam-azul);margin-bottom:8px">Bienvenido al Sistema UAM Transporte</h3>
                 <p style="color:var(--texto-suave);font-size:15px">Gestiona universidades, estudiantes, operadores, unidades, rutas y viajes desde un solo lugar.</p>
             </div>
@@ -1105,7 +1105,7 @@
         const c = document.getElementById('toast-container');
         const t = document.createElement('div');
         t.className = 'toast' + (type === 'error' ? ' error' : '');
-        t.innerHTML = (type === 'error' ? '❌' : '✅') + ' ' + msg;
+        t.innerHTML = (type === 'error' ? 'X' : '+') + ' ' + msg;
         c.appendChild(t);
         setTimeout(() => t.remove(), 3500);
     }
@@ -1462,7 +1462,7 @@
         tb.innerHTML = '<tr><td colspan="5"><div class="loading"><div class="spinner"></div><br>Cargando...</div></td></tr>';
         try {
             const data = await fetch(API + '/rutas').then(r => r.json());
-            if (!data.length) { tb.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">🗺️</div><p>No hay rutas registradas</p></div></td></tr>'; return; }
+            if (!data.length) { tb.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon"></div><p>No hay rutas registradas</p></div></td></tr>'; return; }
             tb.innerHTML = data.map(r => `
       <tr>
         <td><strong>#${r.idRuta}</strong></td>
@@ -1470,8 +1470,8 @@
         <td>${r.origen || '—'}</td>
         <td>${r.destino || '—'}</td>
         <td><div class="td-actions">
-          <button class="btn btn-edit btn-sm" onclick='openModal("ruta", ${JSON.stringify(r)})'>✏️ Editar</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteRuta(${r.idRuta})">🗑️ Borrar</button>
+          <button class="btn btn-edit btn-sm" onclick='openModal("ruta", ${JSON.stringify(r)})'>✏ Editar</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteRuta(${r.idRuta})"> Borrar</button>
         </div></td>
       </tr>`).join('');
         } catch(e) { tb.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--uam-rojo);padding:20px">Error al conectar con el servidor</td></tr>'; }
@@ -1546,8 +1546,8 @@
         <td>${v.horarioSalida || '—'}</td>
         <td>${v.horarioLlegada || '—'}</td>
         <td><div class="td-actions">
-          <button class="btn btn-edit btn-sm" onclick='openModal("viaje", ${JSON.stringify(v)})'>✏️ Editar</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteViaje(${v.idViaje})">🗑️ Borrar</button>
+          <button class="btn btn-edit btn-sm" onclick='openModal("viaje", ${JSON.stringify(v)})'> Editar</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteViaje(${v.idViaje})"> Borrar</button>
         </div></td>
       </tr>`;
             }).join('');
